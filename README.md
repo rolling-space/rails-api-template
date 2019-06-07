@@ -116,7 +116,6 @@ module Services
 
       private
 
-      end
     end
   end
 end

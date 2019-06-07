@@ -107,7 +107,7 @@ end
 
   def open_class
     "
-#{class_indent}class #{last_part} < ApplicationService"
+#{class_indent}class #{last_part}Service < ApplicationService"
   end
 
   def end_class
