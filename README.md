@@ -7,7 +7,7 @@ An opinionated template for `rails new api_name --api`
 To initialize your new Rails API with the template, run
 
 ```
-rails new api_name --api -m https://github.com/wscourge/rails-api-template/template.rb
+rails new api_name --api -m https://raw.githubusercontent.com/wscourge/rails-api-template/master/template.rb
 ```
 
 ## Insights
@@ -49,7 +49,12 @@ All stuff included in the freshly new Rails API
 
 ### Services
 
-Ready to use `app/services/` directory and services generator:
+Rails `ServiceObjects`, following the rails naming conventions:
+
+- directory `app/services/class_name_service.rb
+- class names `Services::ClassNameService`
+
+Generator:
 
 #### Simple services
 
@@ -67,7 +72,7 @@ results in:
 # frozen_string_literal: true
 
 module Services
-  class CallDaddy < ApplicationService
+  class CallDaddyService < ApplicationService
     def call
 
     end
@@ -109,7 +114,7 @@ results in:
 
 module Services
   module ImportantCalls
-    class MyDaddy < ApplicationService
+    class MyDaddyService < ApplicationService
       def call
 
       end
