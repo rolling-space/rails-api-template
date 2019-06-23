@@ -1,0 +1,15 @@
+AllCops:
+  Exclude:
+    - db/**
+    - db/migrate/**
+    - bin/**
+    - lib/generators/service_generator.rb
+    - vendor/**/*
+Metrics/LineLength:
+  Max: 120
+Metrics/BlockLength:
+  Exclude:
+    - config/**/*
+    - spec/**/*
+Documentation:
+  Enabled: false
