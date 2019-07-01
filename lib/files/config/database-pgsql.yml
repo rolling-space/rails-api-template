@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV['DB_POOL'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: localhost
+  port: 5432
+
+development:
+  <<: *default
+  database: rat_dev_database
+
+test:
+  <<: *default
+  database: rat_tst_database
+
+production:
+  <<: *default
+  database: rat_prd_database

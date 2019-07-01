@@ -1,0 +1,55 @@
+image: 'ruby:2.6'
+cache:
+  paths:
+    - vendor/bundle
+  # expire_in: 24 hrs
+services:
+  - postgres:latest # rat-pgsql
+  - mysql:latest # rat-mysql
+variables:
+  BUNDLE_PATH: vendor/bundle
+  DISABLE_SPRING: 1
+  DB_HOST: postgres # rat-pgsql
+  DB_HOST: mysql # rat-mysqlo
+  RAILS_ENV: test
+  POSTGRES_DB: # rat-pgsql
+  POSTGRES_USER: # rat-pgsql
+  POSTGRES_PASSWORD: # rat-pgsql
+  MYSQL_DATABASE: # rat-mysql
+  MYSQL_ROOT_PASSWORD: # rat-mysql
+before_script:
+  - apt-get update -qq && apt-get install -y -qq postgresql postgresql-contrib libpq-dev cmake
+  - ruby -v
+  - which ruby
+  - gem install bundler --no-ri --no-rdoc
+  - RAILS_ENV=test bundle install --jobs $(nproc) "${FLAGS[@]}"
+  - RAILS_ENV=test bundle exec rails db:create db:schema:load db:seed --trace
+rubocop: # rat-rubocop
+  stage:  rubocop# rat-rubocop
+  script: # rat-rubocop
+    - bundle exec rubocop # rat-rubocop
+fasterer: # rat-fasterer
+  stage:  # rfastererat-fasterer
+  script: # rat-fasterer
+    - bundle exec fasterer # rat-fasterer
+brakeman: # rat-brakeman
+  stage:  # rbrakemanat-brakeman
+  script: # rat-brakeman
+    - bundle exec brakeman # rat-brakeman
+bundle_audit: # rat-bundle-a
+  stage: # ra tbundle_audit-bundle-auditudit
+  script: # rat-bundle-audit
+    - bundle audit # rat-bundle-audit
+rspec: # rat-rspec
+  stage: rspec # rat-rspec
+  script: # rat-rspec
+    - RAILS_ENV=test bundle exec rspec --profile 10 --format progress # rat-rspec
+
+stages:
+  - rubocop
+  - fasterer
+  - brakeman
+  - audit
+  - rspec
+
+

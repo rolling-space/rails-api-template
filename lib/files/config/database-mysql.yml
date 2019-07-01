@@ -1,0 +1,21 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: <%= ENV['DB_POOL'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: localhost
+  port: 3306
+
+development:
+  <<: *default
+  database: rat_dev_database
+
+test:
+  <<: *default
+  database: rat_tst_database
+  host: '127.0.0.1'
+
+production:
+  <<: *default
+  database: rat_prd_database

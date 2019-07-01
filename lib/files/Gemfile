@@ -1,0 +1,66 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.6.3'
+
+gem 'bootsnap', require: false
+gem 'dotenv-rails'
+gem 'dry-validation'
+gem 'fast_jsonapi'
+gem 'httparty'
+gem 'mysql2', '>= 0.4.4'
+gem 'pg', '>= 0.18', '< 2.0'
+gem 'puma'
+gem 'rails'
+gem 'redis'
+gem 'redis-rails'
+gem 'rswag-api'
+gem 'rswag-ui'
+gem 'sidekiq'
+gem 'sqlite3', '~> 1.4'
+
+group :development, :test do
+  gem 'brakeman'
+  gem 'bundler-audit'
+  gem 'byebug'
+  gem 'fasterer'
+  gem 'ffaker'
+  gem 'nested-generators'
+  gem 'pry-byebug'
+  gem 'rails_best_practices'
+  gem 'rails-controller-testing'
+  # gem 'reek'
+  gem 'rspec-rails'
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
+end
+
+group :development do
+  gem 'better_errors' 
+  gem 'binding_of_caller'
+  gem 'guard'
+  # TODO: check if CD requires it in the :test environment
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'spring'
+  gem 'spring-watcher-listen'
+end
+
+group :test do
+  gem 'database_cleaner'
+  gem 'coveralls'
+  gem 'factory_bot_rails'
+  gem 'rspec-sidekiq'
+  gem 'rswag-specs'
+  gem 'shoulda-matchers'
+  gem 'simplecov'
+end
+
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

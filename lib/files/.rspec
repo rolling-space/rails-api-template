@@ -1,6 +1,5 @@
---format documentation
---color
 --require spec_helper
 --require rails_helper
---order defined
+--format documentation
+--color
 --profile

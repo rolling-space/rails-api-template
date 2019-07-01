@@ -1,0 +1,165 @@
+version: 2.1
+
+executors:
+  default:
+    working_directory: ~/rat-app-name
+    docker:
+      - image: circleci/ruby:2.6.1
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_PATH: vendor/bundle
+          BUNDLE_RETRY: 3
+          BUNDLER_VERSION: 2.0.1
+          RAILS_ENV: test
+          MYSQL_HOST: 127.0.0.1 # rat-mysql
+          PG_HOST: localhost # rat-pgsql
+          PGUSER: # rat-pgsql
+      - image: circleci/postgres:latest # rat-pgsql
+        environment: # rat-pgsql
+          POSTGRES_DB: # rat-pgsql
+          POSTGRES_USER: # rat-pgsql
+      - image: circleci/mysql:latest # rat-mysql
+        command: [--default-authentication-plugin=mysql_native_password] # rat-mysql
+        environment: # rat-mysql
+          MYSQL_DATABASE: # rat-mysql
+          MYSQL_USER: # rat-mysql
+          MYSQL_PASSWORD: # rat-mysql
+
+commands:
+  configure_bundler:
+    description: Configure bundler
+    steps:
+      - run:
+          name: Configure bundler
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
+
+jobs:
+  build:
+    executor: default
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - rat-app-name-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - rat-app-name-
+      - configure_bundler
+      - run:
+          name: Install bundle
+          command: bundle install
+      - save_cache:
+          key: rat-app-name-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - ./rat-app-name
+
+  database:
+    executor: default
+    steps:
+      - attach_workspace:
+          at: ~/
+      - configure_bundler
+      - run:
+          name: Setup DB
+          command: bundle exec rails db:create db:schema:load --trace
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - ./
+
+  audit: # rat-bundle-audit
+    executor: default # rat-bundle-audit
+    steps: # rat-bundle-audit
+      - attach_workspace: # rat-bundle-audit
+          at: ~/ # rat-bundle-audit
+      - configure_bundler # rat-bundle-audit
+      - run: # rat-bundle-audit
+          name: Bundle audit # rat-bundle-audit
+          command: bundle exec bundle audit # rat-bundle-audit
+ # rat-bundle-audit
+  brakeman: # rat-brakeman
+    executor: default # rat-brakeman
+    steps: # rat-brakeman
+      - attach_workspace: # rat-brakeman
+          at: ~/ # rat-brakeman
+      - configure_bundler # rat-brakeman
+      - run: # rat-brakeman
+          name: Brakeman # rat-brakeman
+          command: bundle exec brakeman # rat-brakeman
+ # rat-brakeman
+  fasterer: # rat-fasterer
+    executor: default # rat-fasterer
+    steps: # rat-fasterer
+      - attach_workspace: # rat-fasterer
+          at: ~/ # rat-fasterer
+      - configure_bundler # rat-fasterer
+      - run: # rat-fasterer
+          name: Fasterer # rat-fasterer
+          command: bundle exec fasterer # rat-fasterer
+ # rat-fasterer
+  rails_best_practices: # rat-rails-best-practices
+    executor: default # rat-rails-best-practices
+    steps: # rat-rails-best-practices
+      - attach_workspace: # rat-rails-best-practices
+          at: ~/ # rat-rails-best-practices
+      - configure_bundler # rat-rails-best-practices
+      - run: # rat-rails-best-practices
+          name: Rails Best Practices # rat-rails-best-practices
+          command: bundle exec rails_best_practices # rat-rails-best-practices
+ # rat-rails-best-practices
+  rspec: # rat-rspec
+    executor: default # rat-rspec
+    steps: # rat-rspec
+      - attach_workspace: # rat-rspec
+          at: ~/ # rat-rspec
+      - configure_bundler # rat-rspec
+      - run: # rat-rspec
+          name: RSpec # rat-rspec
+          command: | # rat-rspec
+            bundle exec rspec --profile 10 \ # rat-rspec
+                              --format progress # rat-rspec
+      - store_artifacts: # rat-simplecov
+          path: coverage # rat-simplecov
+ # rat-rspec
+  rubocop: # rat-rubocop
+    executor: default # rat-rubocop
+    steps: # rat-rubocop
+      - attach_workspace: # rat-rubocop
+          at: ~/ # rat-rubocop
+      - configure_bundler # rat-rubocop
+      - run: # rat-rubocop
+          name: Rubocop # rat-rubocop
+          command: bundle exec rubocop # rat-rubocop
+ # rat-rubocop
+workflows:
+  version: 2
+  integration:
+    jobs:
+      - build
+      - database:
+          requires:
+            - build
+      - audit: # rat-bundle-audit
+          requires: # rat-bundle-audit
+            - build # rat-bundle-audit
+      - brakeman: # rat-brakeman
+          requires: # rat-brakeman
+            - build # rat-brakeman
+      - fasterer: # rat-fasterer
+          requires: # rat-fasterer
+            - build # rat-fasterer
+      - rails_best_practices: # rat-rails-best-practices
+          requires: # rat-rails-best-practices
+            - build # rat-rails-best-practices
+      - rspec: # rat-rspec
+          requires: # rat-rspec
+            - build # rat-rspec
+            - database # rat-rspec
+      - rubocop: # rat-rubocop
+          requires: # rat-rubocop
+            - build # rat-rubocop
