@@ -2,36 +2,85 @@
 
 require 'open-uri'
 
+REPO_LIB = [
+  'lib/build.rb',
+  # 'lib/ci.rb',
+  # 'lib/config_file.rb',
+  # 'lib/defaults.rb',
+  # 'lib/dry_validation.rb',
+  # 'lib/fast_jsonapi.rb',
+  # 'lib/gemfile.rb',
+  # 'lib/questions.rb',
+  # 'lib/rspec.rb',
+  # 'lib/rubocop.rb',
+  # 'lib/travis.rb',
+  # 'lib/writer.rb',
+  # 'lib/capistrano.rb',
+  # 'lib/circle.rb',
+  # 'lib/db.rb',
+  # 'lib/dotenv.rb',
+  # 'lib/fasterer.rb',
+  # 'lib/gems.rb',
+  # 'lib/redis.rb',
+  # 'lib/rswag.rb',
+  # 'lib/sidekiq.rb',
+  # 'lib/variant.rb',
+  # 'lib/files/Gemfile',
+  # 'lib/files/.fasterer.yml',
+  # 'lib/files/.gitlab-ci.yml',
+  # 'lib/files/.travis.yml',
+  # 'lib/files/.gitignore',
+  # 'lib/files/.env',
+  # 'lib/files/.rubocop.yml',
+  # 'lib/files/.rspec',
+  # 'lib/files/.circleci/config.yml',
+  # 'lib/files/config/application.rb',
+  # 'lib/files/config/database-mysql.yml',
+  # 'lib/files/config/database-pgsql.yml',
+  # 'lib/files/config/sidekiq.yml',
+  # 'lib/files/config/initializers/redis.rb',
+  # 'lib/files/config/initializers/rswag_api.rb',
+  # 'lib/files/config/initializers/sidekiq.rb',
+  # 'lib/files/spec/rails_helper.rb',
+  # 'lib/files/spec/spec_helper.rb',
+]
+
 def download(path, destination)
   repo_file = "https://raw.github.com/wscourge/rails-api-template/master/#{path}"
   begin
-    File.delete(destination) if File.exist?(destination)
-    IO.copy_stream(open(repo_file), destination)
-    # remove_file destination
-    # get source, destination
+    # File.delete(destination) if File.exist?(destination)
+    # IO.copy_stream(open(repo_file), destination)
+    remove_file destination
+    get repo_file, destination
   rescue OpenURI::HTTPError
-    puts "Unable to obtain #{source}"
+    puts "Unable to obtain #{path}"
   end
 end
 
 def build_tmp
-  # tmp = ('a'..'z').to_a.shuffle[0,8].join
-  # lib = "#{tmp}/lib"
-  # files = "#{tmp}/files"
-  # Dir.mkdir(tmp)
-  # Dir.mkdir(lib)
-  # Dir.mkdir(files)
-  # download('lib/ask.rb', "#{lib}/ask.rb")
-  # download('lib/defaults.rb', "#{lib}/defaults.rb")
+  tmp = ('a'..'z').to_a.shuffle[0,8].join
+  Dir.mkdir(tmp)
+  Dir.mkdir("#{tmp}/lib")
+  Dir.mkdir("#{tmp}/lib/files")
+  Dir.mkdir("#{tmp}/lib/files/spec")
+  Dir.mkdir("#{tmp}/lib/files/config")
+  Dir.mkdir("#{tmp}/lib/files/config/initializers")
+  Dir.mkdir("#{tmp}/lib/files/.circleci")
 
-
-  require_relative('lib/build.rb')
-  require_relative('lib/defaults.rb')
-  require_relative('lib/gems.rb')
-  require_relative('lib/questions.rb')
-  require_relative('lib/variant.rb')
+  REPO_LIB.each do |path|
+    download(path, "#{tmp}/#{path}")
+  end
+  puts "pwd: #{`pwd`}"
+  puts "__dir__: #{__dir__}"
+  puts "__FILE__: #{__FILE__}"
+  puts "exp: #{File.expand_path("#{tmp}/lib/build", `pwd`)}"
+  require_relative(File.expand_path("#{tmp}/lib/build", `pwd`))
+  # require_relative("#{`pwd`}/#{tmp}/lib/defaults.rb")
+  # require_relative("#{`pwd`}/#{tmp}/lib/gems.rb")
+  # require_relative("#{`pwd`}/#{tmp}/lib/questions.rb")
+  # require_relative("#{`pwd`}/#{tmp}/lib/variant.rb")
   # return dirname so it can be deleted later
-  # tmp
+  tmp
 end
 
 def red(text)
@@ -54,6 +103,7 @@ end
 
 begin
   tmp = build_tmp
+  return
   ask = Template::Questions.new
   ask.db_provider
 
@@ -92,7 +142,7 @@ begin
   after_bundle do
     run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
   end
-  # cleanup_tmp
+  File.delete(tmp)
 # rescue LoadError
 #   tty_required_message
 end
