@@ -72,7 +72,7 @@ def build_tmp
     download(path, "#{tmp}/#{path}")
   end
   
-  require("#{tmp}/lib/build.rb")
+  require("#{`pwd`}/#{tmp}/lib/build.rb")
   puts "class: #{Template::Build.class}"
   # require_relative("#{`pwd`}/#{tmp}/lib/defaults.rb")
   # require_relative("#{`pwd`}/#{tmp}/lib/gems.rb")
