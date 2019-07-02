@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open-uri'
+require 'fileutils'
 
 REPO_LIB = [
   'lib/build.rb',
@@ -141,7 +142,8 @@ begin
   after_bundle do
     run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
   end
-  File.delete(tmp)
+  
+  FileUtils.remove_dir(tmp)
   puts $LOAD_PATH
 rescue LoadError => e
   puts e
