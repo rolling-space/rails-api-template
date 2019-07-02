@@ -145,6 +145,7 @@ begin
   #   run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
   # end
   # File.delete(tmp)
-# rescue LoadError
+rescue LoadError => e
+  puts e
 #   tty_required_message
 end
