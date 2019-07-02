@@ -46,7 +46,7 @@ REPO_LIB = [
 ]
 
 def download(path, destination)
-  repo_file = "https://raw.github.com/wscourge/rails-api-template/master/#{path}"
+  repo_file = "https://raw.github.com/wscourge/rails-api-template/master/#{path}?ts=#{Date.new.to_time}"
   begin
     # File.delete(destination) if File.exist?(destination)
     # IO.copy_stream(open(repo_file), destination)
