@@ -4,45 +4,45 @@ require 'open-uri'
 
 REPO_LIB = [
   'lib/build.rb',
-  # 'lib/ci.rb',
-  # 'lib/config_file.rb',
-  # 'lib/defaults.rb',
-  # 'lib/dry_validation.rb',
-  # 'lib/fast_jsonapi.rb',
-  # 'lib/gemfile.rb',
-  # 'lib/questions.rb',
-  # 'lib/rspec.rb',
-  # 'lib/rubocop.rb',
-  # 'lib/travis.rb',
-  # 'lib/writer.rb',
-  # 'lib/capistrano.rb',
-  # 'lib/circle.rb',
-  # 'lib/db.rb',
-  # 'lib/dotenv.rb',
-  # 'lib/fasterer.rb',
-  # 'lib/gems.rb',
-  # 'lib/redis.rb',
-  # 'lib/rswag.rb',
-  # 'lib/sidekiq.rb',
-  # 'lib/variant.rb',
-  # 'lib/files/Gemfile',
-  # 'lib/files/.fasterer.yml',
-  # 'lib/files/.gitlab-ci.yml',
-  # 'lib/files/.travis.yml',
-  # 'lib/files/.gitignore',
-  # 'lib/files/.env',
-  # 'lib/files/.rubocop.yml',
-  # 'lib/files/.rspec',
-  # 'lib/files/.circleci/config.yml',
-  # 'lib/files/config/application.rb',
-  # 'lib/files/config/database-mysql.yml',
-  # 'lib/files/config/database-pgsql.yml',
-  # 'lib/files/config/sidekiq.yml',
-  # 'lib/files/config/initializers/redis.rb',
-  # 'lib/files/config/initializers/rswag_api.rb',
-  # 'lib/files/config/initializers/sidekiq.rb',
-  # 'lib/files/spec/rails_helper.rb',
-  # 'lib/files/spec/spec_helper.rb',
+  'lib/ci.rb',
+  'lib/config_file.rb',
+  'lib/defaults.rb',
+  'lib/dry_validation.rb',
+  'lib/fast_jsonapi.rb',
+  'lib/gemfile.rb',
+  'lib/questions.rb',
+  'lib/rspec.rb',
+  'lib/rubocop.rb',
+  'lib/travis.rb',
+  'lib/writer.rb',
+  'lib/capistrano.rb',
+  'lib/circle.rb',
+  'lib/db.rb',
+  'lib/dotenv.rb',
+  'lib/fasterer.rb',
+  'lib/gems.rb',
+  'lib/redis.rb',
+  'lib/rswag.rb',
+  'lib/sidekiq.rb',
+  'lib/variant.rb',
+  'lib/files/Gemfile',
+  'lib/files/.fasterer.yml',
+  'lib/files/.gitlab-ci.yml',
+  'lib/files/.travis.yml',
+  'lib/files/.gitignore',
+  'lib/files/.env',
+  'lib/files/.rubocop.yml',
+  'lib/files/.rspec',
+  'lib/files/.circleci/config.yml',
+  'lib/files/config/application.rb',
+  'lib/files/config/database-mysql.yml',
+  'lib/files/config/database-pgsql.yml',
+  'lib/files/config/sidekiq.yml',
+  'lib/files/config/initializers/redis.rb',
+  'lib/files/config/initializers/rswag_api.rb',
+  'lib/files/config/initializers/sidekiq.rb',
+  'lib/files/spec/rails_helper.rb',
+  'lib/files/spec/spec_helper.rb',
 ]
 
 def download(path, destination)
@@ -73,8 +73,12 @@ def build_tmp
   end
   
   lib = "#{`pwd`[0..-2]}/#{tmp}/lib/"
-  puts "X: #{lib}"
+
   require("#{lib}build.rb")
+  require("#{lib}defaults.rb")
+  require("#{lib}gems.rb")
+  require("#{lib}questions.rb")
+  require("#{lib}variant.rb")
 
 
   # puts "class: #{Template::Build.class}"
