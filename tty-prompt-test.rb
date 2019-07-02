@@ -106,45 +106,45 @@ end
 begin
   tmp = build_tmp
   return 
-  ask = Template::Questions.new
-  ask.db_provider
+  # ask = Template::Questions.new
+  # ask.db_provider
 
-  unless ask.db_sqlite?
-    ask.db_username
-    ask.db_password
-    ask.db_host
-  end
+  # unless ask.db_sqlite?
+  #   ask.db_username
+  #   ask.db_password
+  #   ask.db_host
+  # end
 
-  if ask.redis
-    ask.redis_url
-    ask.redis_db
-    ask.redis_port
-    if ask.sentinel
-      ask.sentinel_url
-      ask.sentinel_db
-      ask.sentinel_port
-      ask.sentinel_hosts
-    end
-    ask.sidekiq_namespace if ask.sidekiq
-  end
+  # if ask.redis
+  #   ask.redis_url
+  #   ask.redis_db
+  #   ask.redis_port
+  #   if ask.sentinel
+  #     ask.sentinel_url
+  #     ask.sentinel_db
+  #     ask.sentinel_port
+  #     ask.sentinel_hosts
+  #   end
+  #   ask.sidekiq_namespace if ask.sidekiq
+  # end
 
-  ask.type
+  # ask.type
 
-  if ask.custom?
-    ask.prd
-    ask.dev
-    ask.tst
-    ask.ci
-  end
+  # if ask.custom?
+  #   ask.prd
+  #   ask.dev
+  #   ask.tst
+  #   ask.ci
+  # end
 
-  variant = Template::Variant.new(ask.answers).options
-  build = Template::Build.new(app_name: app_name, answers: variant)
-  build.call
+  # variant = Template::Variant.new(ask.answers).options
+  # build = Template::Build.new(app_name: app_name, answers: variant)
+  # build.call
 
-  after_bundle do
-    run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
-  end
-  File.delete(tmp)
+  # after_bundle do
+  #   run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
+  # end
+  # File.delete(tmp)
 # rescue LoadError
 #   tty_required_message
 end
