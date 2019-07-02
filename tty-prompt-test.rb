@@ -66,13 +66,14 @@ def build_tmp
   Dir.mkdir("#{tmp}/lib/files/config")
   Dir.mkdir("#{tmp}/lib/files/config/initializers")
   Dir.mkdir("#{tmp}/lib/files/.circleci")
+  $LOAD_PATH.unshift(tmp) unless $LOAD_PATH.include?(tmp)
 
   REPO_LIB.each do |path|
     download(path, "#{tmp}/#{path}")
   end
   
-  # require_relative("#{tmp}/lib/build.rb")
-  # puts "class: #{Template::Build.class}"
+  require_relative("#{tmp}/lib/build.rb")
+  puts "class: #{Template::Build.class}"
   # require_relative("#{`pwd`}/#{tmp}/lib/defaults.rb")
   # require_relative("#{`pwd`}/#{tmp}/lib/gems.rb")
   # require_relative("#{`pwd`}/#{tmp}/lib/questions.rb")
