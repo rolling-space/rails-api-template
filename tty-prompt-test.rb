@@ -75,7 +75,7 @@ def build_tmp
   puts "__FILE__: #{__FILE__}"
   puts "exp: #{File.expand_path("#{tmp}/lib/build", `pwd`)}"
   puts "ls: #{`ls -altrh`}"
-  require_relative("#{tmp}/lib/build.rb")
+  # require_relative("#{tmp}/lib/build.rb")
   puts "class: #{Template::Build.class}"
   # require_relative("#{`pwd`}/#{tmp}/lib/defaults.rb")
   # require_relative("#{`pwd`}/#{tmp}/lib/gems.rb")
