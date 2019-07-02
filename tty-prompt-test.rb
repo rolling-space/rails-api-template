@@ -59,6 +59,8 @@ end
 
 def build_tmp
   tmp = ('a'..'z').to_a.shuffle[0,8].join
+  lib = "#{`pwd`[0..-2]}/#{tmp}/lib/"
+
   Dir.mkdir(tmp)
   Dir.mkdir("#{tmp}/lib")
   Dir.mkdir("#{tmp}/lib/files")
@@ -71,21 +73,12 @@ def build_tmp
   REPO_LIB.each do |path|
     download(path, "#{tmp}/#{path}")
   end
-  
-  lib = "#{`pwd`[0..-2]}/#{tmp}/lib/"
 
   require("#{lib}build.rb")
   require("#{lib}defaults.rb")
   require("#{lib}gems.rb")
   require("#{lib}questions.rb")
   require("#{lib}variant.rb")
-
-
-  # puts "class: #{Template::Build.class}"
-  # require_relative("#{`pwd`}/#{tmp}/lib/defaults.rb")
-  # require_relative("#{`pwd`}/#{tmp}/lib/gems.rb")
-  # require_relative("#{`pwd`}/#{tmp}/lib/questions.rb")
-  # require_relative("#{`pwd`}/#{tmp}/lib/variant.rb")
   # return dirname so it can be deleted later
   tmp
 end
@@ -110,46 +103,46 @@ end
 
 begin
   tmp = build_tmp
-  return 
-  # ask = Template::Questions.new
-  # ask.db_provider
+  ask = Template::Questions.new
+  ask.db_provider
 
-  # unless ask.db_sqlite?
-  #   ask.db_username
-  #   ask.db_password
-  #   ask.db_host
-  # end
+  unless ask.db_sqlite?
+    ask.db_username
+    ask.db_password
+    ask.db_host
+  end
 
-  # if ask.redis
-  #   ask.redis_url
-  #   ask.redis_db
-  #   ask.redis_port
-  #   if ask.sentinel
-  #     ask.sentinel_url
-  #     ask.sentinel_db
-  #     ask.sentinel_port
-  #     ask.sentinel_hosts
-  #   end
-  #   ask.sidekiq_namespace if ask.sidekiq
-  # end
+  if ask.redis
+    ask.redis_url
+    ask.redis_db
+    ask.redis_port
+    if ask.sentinel
+      ask.sentinel_url
+      ask.sentinel_db
+      ask.sentinel_port
+      ask.sentinel_hosts
+    end
+    ask.sidekiq_namespace if ask.sidekiq
+  end
 
-  # ask.type
+  ask.type
 
-  # if ask.custom?
-  #   ask.prd
-  #   ask.dev
-  #   ask.tst
-  #   ask.ci
-  # end
+  if ask.custom?
+    ask.prd
+    ask.dev
+    ask.tst
+    ask.ci
+  end
 
-  # variant = Template::Variant.new(ask.answers).options
-  # build = Template::Build.new(app_name: app_name, answers: variant)
-  # build.call
+  variant = Template::Variant.new(ask.answers).options
+  build = Template::Build.new(app_name: app_name, answers: variant)
+  build.call
 
-  # after_bundle do
-  #   run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
-  # end
-  # File.delete(tmp)
+  after_bundle do
+    run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
+  end
+  File.delete(tmp)
+  puts $LOAD_PATH
 rescue LoadError => e
   puts e
 #   tty_required_message
