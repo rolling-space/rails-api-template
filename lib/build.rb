@@ -43,8 +43,9 @@ module Template
       @rubocop = Template::RuboCop.new(gems: @gems)
       @rswag = Template::Rswag.new(gems: @gems)
       @dotenv = Template::DotEnv.new(gems: @gems, db: @db, redis: @redis)
-      @fastjsonapi = Template::FastJSONAPI.new(gems: @gems)
+      @fast_jsonapi = Template::FastJsonApi.new(gems: @gems)
       @fasterer = Template::Fasterer.new(gems: @gems)
+      @dry_validation = Template::DryValidation.new(gems: @gems)
       @ci = Template::CI.new(ci: answers[:ci], gems: @gems, db: @db, app_name: @app_name)
     end
 
@@ -57,7 +58,8 @@ module Template
       @rswag.write
       @dotenv.write
       @redis.write
-      @fastjsonapi.write
+      @fast_jsonapi.write
+      @dry_validation.write
       @fasterer.write
       @ci.write
     end

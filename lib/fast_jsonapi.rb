@@ -4,7 +4,7 @@ require_relative('writer')
 require_relative('config_file')
 
 module Template
-  class FastJSONAPI < Template::Writer
+  class FastJsonApi < Template::Writer
     def initialize(gems:)
       @gems = gems
     end

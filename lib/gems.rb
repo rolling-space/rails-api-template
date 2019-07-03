@@ -172,6 +172,7 @@ module Template
         @tst << 'rswag-specs' if rswag?
         @tst << 'shoulda-matchers' if shoulda_matchers?
         @tst << 'simplecov' if simplecov?
+        @tst << 'timecop' if timecop?
       end
     end
   end

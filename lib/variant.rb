@@ -26,10 +26,6 @@ module Template
       @git_credentials = answers[:git_credentials]
       @git_username = answers[:git_username]
       @git_email = answers[:git_email]
-      puts "---------------------------"
-      puts "BRANCHNG MODEL ANSWER"
-      puts answers[:git_branching_model]
-      puts "---------------------------"
       @git_branching_model = answers[:git_branching_model]
       @ci = answers[:ci]
       @options = answers[:type] == :custom ? answers : predefined
