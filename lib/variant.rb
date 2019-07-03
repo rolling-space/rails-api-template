@@ -21,6 +21,12 @@ module Template
       @sentinel_port = answers[:sentinel_port]
       @sentinel_hosts = answers[:sentinel_hosts]
       @sidekiq = answers[:sidekiq]
+      @git = answers[:git]
+      @git_remote = answers[:git_remote]
+      @git_credentials = answers[:git_credentials]
+      @git_username = answers[:git_username]
+      @git_email = answers[:git_email]
+      @git_branching_model = answers[:git_branching_model][:value]
       @ci = answers[:ci]
       @options = answers[:type] == :custom ? answers : predefined
     end
@@ -57,6 +63,12 @@ module Template
         h[:sentinel_hosts] = @sentinel_hosts
         h[:sidekiq] = @sidekiq
         h[:ci] = :circle
+        h[:git] = @git
+        h[:git_remote] = @git_remote
+        h[:git_credentials] = @git_credentials
+        h[:git_username] = @git_username
+        h[:git_email] = @git_email
+        h[:git_branching_model] = @git_branching_model
       end
     end
   end

@@ -68,7 +68,17 @@ module Template
       sentinel_db: '0',
       sentinel_port: '26379',
       sentinel_hosts: 'sentinel-slave-1 sentinel-slave-2 sentinel-slave-3',
-      sidekiq: true
+      sidekiq: true,
+      git: true,
+      git_remote: '',
+      git_credentials: false,
+      git_username: ENV['USER'],
+      git_email: '',
+      git_branching_model: [
+        { name: 'none', value: :none },
+        { name: 'gitflow', value: :gitflow },
+        { name: 'hubflow', value: :hubflow }
+      ],
     }
   end
 end

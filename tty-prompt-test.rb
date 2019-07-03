@@ -91,7 +91,6 @@ def build_tmp
   require("#{lib}gems.rb")
   require("#{lib}questions.rb")
   require("#{lib}variant.rb")
-  # return dirname so it can be deleted later
   tmp
 end
 
@@ -118,6 +117,15 @@ if ask.redis
   ask.sidekiq_namespace if ask.sidekiq
 end
 
+if ask.git
+  ask.git_remote
+  if ask.git_credentials
+    ask.git_username
+    ask.git_email
+  end
+  ask.git_branching_model
+end
+
 ask.type
 
 if ask.custom?
@@ -133,6 +141,16 @@ build.call
 
 after_bundle do
   run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
+  if variant.options[:git]
+    run "git remote add origin #{variant.options[:git_remote]}"
+    run "git config user.email #{variant.options[:git_email]}" if variant.options[:git_credentials]
+    run "git config user.name #{variant.options[:git_username]}" if variant.options[:git_credentials]
+    run "git flow init" if variant.options[:git_branching_model] == :gitflow
+    run "git hf init" if variant.options[:git_branching_model] == :hubflow
+    run "git add ."
+    run "git commit -m 'Initial commit'"
+    run "git push -u origin master"
+  end
 end
 
 FileUtils.remove_dir(tmp)

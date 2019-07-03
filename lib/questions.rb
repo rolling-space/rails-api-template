@@ -156,6 +156,43 @@ module Template
       @answers[:sidekiq_namespace] ||= TTY::Prompt.new.ask('Enter Sidekiq nampespace', default: 'sidekiq')
     end
 
+    def git
+      answers[:git] ||= TTY::Prompt.new.yes?('Setup git version control?', default: true)
+    end
+
+    def git_remote
+      answers[:git_remote] ||= TTY::Prompt.new.ask('Git remote address (HTTPS/SSH)', required: true)
+    end
+
+    def git_credentials
+      answers[:git_credentials] ||= TTY::Prompt.new.yes?(
+        'Setup git credentials specific for this repository? If not, globals are used.',
+        default: false
+      )
+    end
+
+    def git_username
+      answers[:git_username] ||= TTY::Prompt.new.ask('Git username', default: ENV['USER'])
+    end
+
+    def git_email
+      answers[:git_email] ||= TTY::Prompt.new.ask('Git email', required: true)
+    end
+
+    def git_branching_model
+      answers[:git_branching_model] ||= TTY::Prompt.new.select(
+        'Select git branching model',
+        echo: false,
+        cycle: true,
+        active_color: @active_color
+      ) do |menu|
+        menu.help('none by default')
+        menu.default(3)
+        menu.per_page(OPTS[:git_branching_model].length)
+        OPTS[:git_branching_model].each { |opt| menu.choice(opt) }
+      end
+    end
+
     def custom?
       @answers[:type] == :custom
     end
