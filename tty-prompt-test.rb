@@ -48,6 +48,7 @@ REPO_LIB = [
   'lib/files/config/application.rb',
   'lib/files/config/database-mysql.yml',
   'lib/files/config/database-pgsql.yml',
+  'lib/files/config/routes.rb',
   'lib/files/config/sidekiq.yml',
   'lib/files/config/initializers/redis.rb',
   'lib/files/config/initializers/rswag_api.rb',

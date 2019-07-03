@@ -24,7 +24,7 @@ module Template
     def write_config_routes!
       delete_file('config/routes.rb')
       @config_routes.drop!('rat-rswag') unless @gems.rswag?
-      @config_routes.cleanup('rat-rswag')
+      @config_routes.cleanup('rswag')
       @config_routes.write!
     end
 
