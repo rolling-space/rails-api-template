@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+def cli_indent() '      ' end
+def pp(txt) puts "#{cli_indent}#{txt}" end
+
+unless `gem list -i "^tty-prompt$"`[0..3] == 'true'
+  continue = ask('    Gem tty-prompt is required to use the RAT, would you like to install it? (y/n)')
+  exit unless continue.downcase == 'y'
+  pp('Installing tty-prompt')
+  `gem install tty-prompt`
+end
+
 require 'open-uri'
 require 'fileutils'
 
@@ -49,12 +59,10 @@ REPO_LIB = [
 def download(path, destination)
   repo_file = "https://raw.github.com/wscourge/rails-api-template/master/#{path}?ts=#{Date.new.to_time}"
   begin
-    # File.delete(destination) if File.exist?(destination)
-    # IO.copy_stream(open(repo_file), destination)
-    remove_file destination
-    get repo_file, destination
+    File.delete(destination) if File.exist?(destination)
+    IO.copy_stream(open(repo_file), destination)
   rescue OpenURI::HTTPError
-    puts "Unable to obtain #{path}"
+    pp("Unable to obtain #{path}")
   end
 end
 
@@ -71,9 +79,11 @@ def build_tmp
   Dir.mkdir("#{tmp}/lib/files/.circleci")
   $LOAD_PATH.unshift(tmp) unless $LOAD_PATH.include?(tmp)
 
-  REPO_LIB.each do |path|
+  REPO_LIB.each.with_index do |path, index|
     download(path, "#{tmp}/#{path}")
+    printf("\r#{cli_indent}Downloading template files: %d/#{REPO_LIB.length - 1}", index)
   end
+  puts ''
 
   require("#{lib}build.rb")
   require("#{lib}defaults.rb")
@@ -84,68 +94,44 @@ def build_tmp
   tmp
 end
 
-def red(text)
-  "\033[31m#{text}\033[0m"
+tmp = build_tmp
+ask = Template::Questions.new
+ask.db_provider
+
+unless ask.db_sqlite?
+  ask.db_username
+  ask.db_password
+  ask.db_host
 end
 
-def red_bold(text)
-  "\033[31;1m#{text}\033[0m"
+if ask.redis
+  ask.redis_url
+  ask.redis_db
+  ask.redis_port
+  if ask.sentinel
+    ask.sentinel_url
+    ask.sentinel_db
+    ask.sentinel_port
+    ask.sentinel_hosts
+  end
+  ask.sidekiq_namespace if ask.sidekiq
 end
 
-def tty_required_message
-  puts red_bold('┌────────────────────────────────────────────────────┐')
-  puts red_bold('│ TEMPLATE ERROR:                                    │')
-  puts      red('│ tty-prompt is required to use this template - run: │')
-  puts red_bold('│ gem install tty-prompt                             │')
-  puts      red('│ and try again afer installation finishes           │')
-  puts      red('│ https://github.com/piotrmurach/tty-prompt          │')
-  puts red_bold('└────────────────────────────────────────────────────┘ ')
+ask.type
+
+if ask.custom?
+  ask.prd
+  ask.dev
+  ask.tst
+  ask.ci
 end
 
-begin
-  tmp = build_tmp
-  ask = Template::Questions.new
-  ask.db_provider
+variant = Template::Variant.new(ask.answers).options
+build = Template::Build.new(app_name: app_name, answers: variant)
+build.call
 
-  unless ask.db_sqlite?
-    ask.db_username
-    ask.db_password
-    ask.db_host
-  end
-
-  if ask.redis
-    ask.redis_url
-    ask.redis_db
-    ask.redis_port
-    if ask.sentinel
-      ask.sentinel_url
-      ask.sentinel_db
-      ask.sentinel_port
-      ask.sentinel_hosts
-    end
-    ask.sidekiq_namespace if ask.sidekiq
-  end
-
-  ask.type
-
-  if ask.custom?
-    ask.prd
-    ask.dev
-    ask.tst
-    ask.ci
-  end
-
-  variant = Template::Variant.new(ask.answers).options
-  build = Template::Build.new(app_name: app_name, answers: variant)
-  build.call
-
-  after_bundle do
-    run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
-  end
-  
-  FileUtils.remove_dir(tmp)
-  puts $LOAD_PATH
-rescue LoadError => e
-  puts e
-#   tty_required_message
+after_bundle do
+  run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
 end
+
+FileUtils.remove_dir(tmp)
