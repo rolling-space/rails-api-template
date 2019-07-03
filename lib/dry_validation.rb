@@ -12,6 +12,8 @@ module Template
     def write
       return nil unless @gems.dry_validation?
 
+      delete_directory('app/dry_validation')
+      create_directory('app/dry_validation')
       create_directory('app/dry_validation/contracts')
       create_directory('app/dry_validation/schemas')
       write_file('app/dry_validation/contracts/.keep')
