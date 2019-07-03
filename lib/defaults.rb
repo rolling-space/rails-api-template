@@ -75,9 +75,9 @@ module Template
       git_username: ENV['USER'],
       git_email: '',
       git_branching_model: [
-        { name: 'none', value: :none },
+        { name: 'hubflow', value: :hubflow },
         { name: 'gitflow', value: :gitflow },
-        { name: 'hubflow', value: :hubflow }
+        { name: 'none', value: :none }
       ],
     }
   end

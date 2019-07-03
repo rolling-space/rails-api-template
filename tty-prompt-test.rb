@@ -142,11 +142,11 @@ build.call
 after_bundle do
   run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
   if variant.options[:git]
-    run "git remote add origin #{variant.options[:git_remote]}"
-    run "git config user.email #{variant.options[:git_email]}" if variant.options[:git_credentials]
-    run "git config user.name #{variant.options[:git_username]}" if variant.options[:git_credentials]
-    run "git flow init" if variant.options[:git_branching_model] == :gitflow
-    run "git hf init" if variant.options[:git_branching_model] == :hubflow
+    run "git remote add origin #{variant[:git_remote]}"
+    run "git config user.email #{variant[:git_email]}" if variant[:git_credentials]
+    run "git config user.name #{variant[:git_username]}" if variant[:git_credentials]
+    run "git flow init" if variant[:git_branching_model] == :gitflow
+    run "git hf init" if variant[:git_branching_model] == :hubflow
     run "git add ."
     run "git commit -m 'Initial commit'"
     run "git push -u origin master"
