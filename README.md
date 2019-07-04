@@ -33,35 +33,35 @@ created directory for further installation process. It might take a while.
 Next, you will be asked questions about your preferred confguration:
 
 1. Database - MySQL or PostgreSQL
-  - username
-  - password
-  - host
+   - username
+   - password
+   - host
 2. Redis
-  - URL
-  - DB number
-  - port
-  - Sentinel _(optional)_
-    - URL
-    - DB
-    - port
-    - slaves host names
-  - Sidekiq _(optional)_
-    - namespace
+   - URL
+   - DB number
+   - port
+   - Sentinel _(optional)_
+     - URL
+     - DB
+     - port
+     - slaves host names
+   - Sidekiq _(optional)_
+     - namespace
 3. Git _(optional)_
-  - credentials _(optional)_
-    - username
-    - email
-  - branching model
-    - hubflow
-    - gitflow
-    - none
+   - credentials _(optional)_
+     - username
+     - email
+   - branching model
+     - hubflow
+     - gitflow
+     - none
 4. Installation type
-  - Default
-  - Custom
-    - Production gems
-    - Development gems
-    - Test gems
-    - Continous Integration
+   - Default
+   - Custom
+     - Production gems
+     - Development gems
+     - Test gems
+     - Continous Integration
 
 ## Insights
 
@@ -91,7 +91,7 @@ All stuff included in the freshly new Rails API
   ⬢ binding.pry
   ⬢ Rails Best Practices
   ⬢ RuboCop
-  ⬡ Spring _(not selected by default!)_
+  ⬡ Spring # not selected by default!
 ```
 
 ### Test
@@ -101,7 +101,6 @@ All stuff included in the freshly new Rails API
   ⬢ Coveralls
   ⬢ Factory Bot
   ⬢ FFaker
-  ⬢ Guard
   ⬢ Rails Controller Testing
   ⬢ RSpec
   ⬢ SimpleCov

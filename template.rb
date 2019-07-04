@@ -29,6 +29,7 @@ REPO_LIB = [
   'lib/defaults.rb',
   'lib/dry_validation.rb',
   'lib/fast_jsonapi.rb',
+  'lib/rails_new_flags.rb',
   'lib/gemfile.rb',
   'lib/questions.rb',
   'lib/rspec.rb',
@@ -101,6 +102,7 @@ def build_tmp
 
   require("#{lib}build.rb")
   require("#{lib}defaults.rb")
+  require("#{lib}rails_new_flags.rb")
   require("#{lib}gems.rb")
   require("#{lib}questions.rb")
   require("#{lib}variant.rb")
@@ -108,7 +110,15 @@ def build_tmp
 end
 
 tmp = build_tmp
-ask = Template::Questions.new
+
+# require_relative("lib/build.rb")
+# require_relative("lib/defaults.rb")
+# require_relative("lib/gems.rb")
+# require_relative("lib/rails_new_flags.rb")
+# require_relative("lib/questions.rb")
+# require_relative("lib/variant.rb")
+
+ask = Template::Questions.new(flags: ARGV)
 ask.db_provider
 
 unless ask.db_sqlite?
@@ -148,7 +158,7 @@ if ask.custom?
   ask.ci
 end
 
-variant = Template::Variant.new(ask.answers).options
+variant = Template::Variant.new(answers: ask.answers, flags: ARGV).options
 build = Template::Build.new(app_name: app_name, answers: variant)
 build.call
 
@@ -170,4 +180,4 @@ after_bundle do
   end
 end
 
-FileUtils.remove_dir(tmp)
+# FileUtils.remove_dir(tmp)

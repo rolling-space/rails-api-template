@@ -5,12 +5,17 @@ require 'tty-prompt'
 module Template
   class Questions
     include Template::Defaults
+    include Template::RailsNewFlags
 
     attr_reader :answers
 
-    def initialize(active_color = :bright_yellow)
+    def initialize(active_color: :bright_yellow, flags:)
       @active_color = active_color
-      @answers = {}
+      @flags = flags
+      @answers = {}.tap do |h|
+        h[:db_provider] = db_provider_flag if db_flag?
+        h[:git] = false if no_git?
+      end
     end
 
     def type
@@ -29,10 +34,10 @@ module Template
         'Production gems',
         echo: false,
         cycle: true,
-        active_color: @active_color,
+        active_color: @active_color
       ) do |menu|
         menu.help('all by default')
-        menu.default(*(1..OPTS[:prd].length).to_a)
+        menu.default(*prd_defaults)
         menu.per_page(OPTS[:prd].length)
         OPTS[:prd].each { |opt| menu.choice(opt) }
       end
@@ -46,7 +51,7 @@ module Template
         active_color: @active_color
       ) do |menu|
         menu.help('all but Spring by default')
-        menu.default(*(1..(OPTS[:dev].length - 1)).to_a) # all except spring
+        menu.default(*dev_defaults) # all except spring
         menu.per_page(OPTS[:dev].length)
         OPTS[:dev].each { |opt| menu.choice(opt) }
       end
@@ -157,30 +162,32 @@ module Template
     end
 
     def git
-      answers[:git] ||= TTY::Prompt.new.yes?('Setup git version control?', default: true)
+      return false if no_git?
+
+      @answers[:git] ||= TTY::Prompt.new.yes?('Setup git version control?', default: true)
     end
 
     def git_remote
-      answers[:git_remote] ||= TTY::Prompt.new.ask('Git remote address (HTTPS/SSH)', required: true)
+      @answers[:git_remote] ||= TTY::Prompt.new.ask('Git remote address (HTTPS/SSH)', required: true)
     end
 
     def git_credentials
-      answers[:git_credentials] ||= TTY::Prompt.new.yes?(
+      @answers[:git_credentials] ||= TTY::Prompt.new.yes?(
         'Setup git credentials specific for this repository? If not, globals are used.',
         default: false
       )
     end
 
     def git_username
-      answers[:git_username] ||= TTY::Prompt.new.ask('Git username', default: ENV['USER'])
+      @answers[:git_username] ||= TTY::Prompt.new.ask('Git username', default: ENV['USER'])
     end
 
     def git_email
-      answers[:git_email] ||= TTY::Prompt.new.ask('Git email', required: true)
+      @answers[:git_email] ||= TTY::Prompt.new.ask('Git email', required: true)
     end
 
     def git_branching_model
-      answers[:git_branching_model] ||= TTY::Prompt.new.select(
+      @answers[:git_branching_model] ||= TTY::Prompt.new.select(
         'Select git branching model',
         echo: false,
         cycle: true,
@@ -203,6 +210,25 @@ module Template
 
     def rubocop?
       @answers[:dev].any? { |g| g[:value] == :rubocop }
+    end
+
+    private
+
+    def prd_defaults
+      defaults = (1..OPTS[:prd].length).to_a
+      flat = OPTS[:prd].map { |hash| hash[:value] }
+      defaults.delete(flat.index(:action_mailer) + 1) if no_action_mailer?
+      defaults.delete(flat.index(:action_cable) + 1) if no_action_cable?
+      defaults.delete(flat.index(:active_job) + 1) if no_active_job?
+      defaults.delete(flat.index(:active_storage) + 1) if no_active_storage?
+      defaults
+    end
+
+    def dev_defaults
+      defaults = (1..OPTS[:dev].length).to_a
+      flat = OPTS[:dev].map { |hash| hash[:value] }
+      defaults.delete(flat.index(:spring) + 1) if no_spring?
+      defaults
     end
   end
 end

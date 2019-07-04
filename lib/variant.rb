@@ -3,10 +3,12 @@
 module Template
   class Variant
     include Template::Defaults
+    include Template::RailsNewFlags
 
     attr_reader :options
 
-    def initialize(answers)
+    def initialize(answers: answers, flags: flags)
+      @flags = flags
       @db_provider = answers[:db_provider]
       @db_username = answers[:db_username]
       @db_password = answers[:db_password]
@@ -43,12 +45,23 @@ module Template
 
     def default
       {}.tap do |h|
-        h[:prd] = OPTS[:prd].map { |opt| opt[:value] }
+        h[:prd] = OPTS[:prd].map { |opt| opt[:value] }.select do |opt|
+          return false if no_action_cable? && opt == :action_cable
+          return false if no_action_mailer? && opt == :action_mailer
+          return false if no_active_job? && opt == :active_job
+          return false if no_active_storage? && opt == :active_storage
+
+          true
+        end
         h[:prd] << :dotenv
-        h[:dev] = OPTS[:dev].map { |opt| opt[:value] }.select { |opt| opt != :spring }
+        h[:dev] = OPTS[:dev].map { |opt| opt[:value] }.select do |opt|
+          return false if no_spring? && opt == :spring
+
+          true
+        end
         h[:tst] = OPTS[:tst].map { |opt| opt[:value] }
         h[:ci] = OPTS[:ci].map { |opt| opt[:value] }
-        h[:db_provider] = @db_provider
+        h[:db_provider] = db_flag? ? db_provider_flag : @db_provider
         h[:db_username] = @db_username
         h[:db_password] = @db_password
         h[:db_host] = @db_host
