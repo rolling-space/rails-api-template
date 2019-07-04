@@ -20,7 +20,11 @@ module Template
         { name: 'DRY Validation', value: :dry_validation },
         { name: 'Fast JSON API (Netflix)', value: :fast_jsonapi },
         { name: 'HTTParty', value: :httparty },
-        { name: 'RSWAG', value: :rswag }
+        { name: 'RSWAG', value: :rswag },
+        { name: 'ActionCable', value: :action_cable },
+        { name: 'ActionMailer', value: :action_mailer },
+        { name: 'ActiveJob', value: :active_job },
+        { name: 'ActiveStorage', value: :active_storage }
       ],
       dev: [
         { name: 'Better Errors', value: :better_errors },

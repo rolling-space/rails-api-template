@@ -12,32 +12,18 @@ module Template
       @spec_helper = Template::ConfigFile.new('spec/spec_helper.rb')
       @rails_helper = Template::ConfigFile.new('spec/rails_helper.rb')
       @dot_rspec = Template::ConfigFile.new('.rspec')
-      @config_application = Template::ConfigFile.new('config/application.rb')
     end
 
     def write
-      return cleanup_config_application! unless @gems.rspec?
-
-      delete_file('config/application.rb')
       delete_directory('test')
       delete_directory('spec')
       create_directory('spec')
       write_dot_rspec!
       write_rails_helper!
       write_spec_helper!
-      write_config_application!
     end
 
     private
-
-    def cleanup_config_application!
-      @config_application.drop!('rat-rspec', 'rat-factory-bot')
-      # TODO: dotenv + other options
-      # @config_application.drop!('rat-dotenv') unless @gems.dotenv?
-      @config_application.cleanup('dotenv')
-      @config_application.replace!('module RATAppName', "module #{@app_name}")
-      @config_application.write!
-    end
 
     def write_dot_rspec!
       @dot_rspec.write!
@@ -57,15 +43,6 @@ module Template
       @spec_helper.drop!('rat-simplecov') unless @gems.simplecov?
       @spec_helper.cleanup('simplecov', 'coveralls')
       @spec_helper.write!
-    end
-
-    def write_config_application!
-      @config_application.drop!('rat-factory-bot') unless @gems.factory_bot?
-      # TODO: dotenv + other options
-      # @config_application.drop!('rat-dotenv') unless @gems.dotenv?
-      @config_application.cleanup('factory-bot', 'rspec', 'dotenv')
-      @config_application.replace!('module RATAppName', "module #{@app_name}")
-      @config_application.write!
     end
   end
 end

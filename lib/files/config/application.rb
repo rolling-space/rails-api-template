@@ -3,15 +3,15 @@
 require_relative 'boot'
 require 'rails'
 require 'active_model/railtie'
-require 'active_job/railtie'
+require 'active_job/railtie' # rat-active-job
 require 'active_record/railtie'
-require 'active_storage/engine'
+require 'active_storage/engine' # rat-active-storage
 require 'action_controller/railtie'
-require 'action_mailer/railtie'
-require 'action_mailbox/engine'
+require 'action_mailer/railtie' # rat-action-mailer
+require 'action_mailbox/engine' # rat-action-mailer
 require 'action_text/engine'
 require 'action_view/railtie'
-require 'action_cable/engine'
+require 'action_cable/engine' # rat-action-cable
 
 Bundler.require(*Rails.groups)
 Dotenv::Railtie.load # rat-dotenv

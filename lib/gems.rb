@@ -19,6 +19,22 @@ module Template
       organize_prd
     end
 
+    def action_cable?
+      @action_cable ||= @gems.include?(:action_cable)
+    end
+
+    def action_mailer?
+      @action_mailer ||= @gems.include?(:action_mailer)
+    end
+
+    def active_job?
+      @active_job ||= @gems.include?(:active_job)
+    end
+
+    def active_storage?
+      @active_storage ||= @gems.include?(:active_storage)
+    end
+
     def better_errors?
       @better_errors ||= @gems.include?(:better_errors)
     end

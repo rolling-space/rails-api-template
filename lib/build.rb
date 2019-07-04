@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
+require_relative('action_cable.rb')
+require_relative('action_mailer.rb')
+require_relative('active_job.rb')
+require_relative('active_storage.rb')
+require_relative('config_application.rb')
+require_relative('config_env_development.rb')
+require_relative('config_env_production.rb')
+require_relative('config_env_test.rb')
 require_relative('capistrano.rb')
 require_relative('ci.rb')
 require_relative('db.rb')
@@ -47,6 +55,14 @@ module Template
       @fasterer = Template::Fasterer.new(gems: @gems)
       @dry_validation = Template::DryValidation.new(gems: @gems)
       @ci = Template::CI.new(ci: answers[:ci], gems: @gems, db: @db, app_name: @app_name)
+      @action_cable = Template::ActionCable.new(gems: @gems)
+      @action_mailer = Template::ActionMailer.new(gems: @gems)
+      @active_job = Template::ActiveJob.new(gems: @gems)
+      @active_storage = Template::ActiveStorage.new(gems: @gems)
+      @config_application = Template::ConfigApplication.new(gems: @gems)
+      @config_env_development = Template::ConfigEnvDevelopment.new(gems: @gems)
+      @config_env_production = Template::ConfigEnvProduction.new(gems: @gems)
+      @config_env_test = Template::ConfigEnvTest.new(gems: @gems)
     end
 
     def call
@@ -62,6 +78,14 @@ module Template
       @dry_validation.write
       @fasterer.write
       @ci.write
+      @action_cable.write
+      @action_mailer.write
+      @active_job.write
+      @active_storage.write
+      @config_application.write
+      @config_env_development.write
+      @config_env_production.write
+      @config_env_test.write
     end
   end
 end
