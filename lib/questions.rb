@@ -45,8 +45,8 @@ module Template
         cycle: true,
         active_color: @active_color
       ) do |menu|
-        menu.help('all by default')
-        menu.default(*(1..OPTS[:dev].length).to_a)
+        menu.help('all but Spring by default')
+        menu.default(*(1..(OPTS[:dev].length - 1)).to_a) # all except spring
         menu.per_page(OPTS[:dev].length)
         OPTS[:dev].each { |opt| menu.choice(opt) }
       end

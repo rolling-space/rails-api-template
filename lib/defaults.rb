@@ -30,7 +30,8 @@ module Template
         { name: 'Nested Generators', value: :nested_generators },
         { name: 'binding.pry', value: :pry_byebug },
         { name: 'Rails Best Practices', value: :rails_best_practices },
-        { name: 'RuboCop', value: :rubocop }
+        { name: 'RuboCop', value: :rubocop },
+        { name: 'Spring', value: :spring }
       ],
       tst: [
         { name: 'Database Cleaner', value: :database_cleaner },

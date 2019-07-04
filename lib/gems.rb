@@ -109,6 +109,10 @@ module Template
       @simplecov ||= rspec? && @gems.include?(:simplecov)
     end
 
+    def spring?
+      @spring ||= @gems.include?(:spring)
+    end
+
     def timecop?
       @timecop ||= rspec? && @gems.include?(:timecop)
     end
@@ -161,6 +165,7 @@ module Template
       end
 
       @dev << 'guard' if guard?
+      @dev << 'spring' if spring?
     end
 
     def organize_tst

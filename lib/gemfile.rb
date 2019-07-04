@@ -62,6 +62,7 @@ module Template
       @gemfile.drop!('rails_controller_testing') unless @gems.rspec?
       @gemfile.drop!('rspec') unless @gems.rspec?
       @gemfile.drop!('rubocop') unless @gems.rubocop?
+      @gemfile.drop!('spring') unless @gems.spring?
     end
 
     def dev_gems!

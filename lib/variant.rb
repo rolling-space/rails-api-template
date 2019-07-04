@@ -45,7 +45,7 @@ module Template
       {}.tap do |h|
         h[:prd] = OPTS[:prd].map { |opt| opt[:value] }
         h[:prd] << :dotenv
-        h[:dev] = OPTS[:dev].map { |opt| opt[:value] }
+        h[:dev] = OPTS[:dev].map { |opt| opt[:value] }.reject { |opt| opt == :spring }
         h[:tst] = OPTS[:tst].map { |opt| opt[:value] }
         h[:ci] = OPTS[:ci].map { |opt| opt[:value] }
         h[:db_provider] = @db_provider

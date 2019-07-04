@@ -140,6 +140,7 @@ build = Template::Build.new(app_name: app_name, answers: variant)
 build.call
 
 after_bundle do
+  run 'rails db:setup'
   run 'bundle exec rubocop --safe-auto-correct --format quiet' if build.gems.rubocop?
   if variant[:git]
     gitflow = variant[:git_branching_model] == :gitflow
