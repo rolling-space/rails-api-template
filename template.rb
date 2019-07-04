@@ -180,4 +180,4 @@ after_bundle do
   end
 end
 
-# FileUtils.remove_dir(tmp)
+FileUtils.remove_dir(tmp)
