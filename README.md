@@ -1,6 +1,16 @@
-# Rails API Template
+# RAT - Rails API Template
 
 An opinionated template for `rails new api_name --api`
+
+## Prerequisites
+
+All that has to be done before using the template
+
+1. Ruby with Ruby on Rails gem installed
+2. MySQL or PostgreSQL + user with READ / WRITE permissions
+3. Redis (if you want to use it)
+4. Git & remote git repository (if you want to use it)
+5. Internet connection
 
 ## Usage
 

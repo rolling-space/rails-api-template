@@ -59,7 +59,7 @@ module Template
       @action_mailer = Template::ActionMailer.new(gems: @gems)
       @active_job = Template::ActiveJob.new(gems: @gems)
       @active_storage = Template::ActiveStorage.new(gems: @gems)
-      @config_application = Template::ConfigApplication.new(gems: @gems)
+      @config_application = Template::ConfigApplication.new(gems: @gems, app_name: @app_name)
       @config_env_development = Template::ConfigEnvDevelopment.new(gems: @gems)
       @config_env_production = Template::ConfigEnvProduction.new(gems: @gems)
       @config_env_test = Template::ConfigEnvTest.new(gems: @gems)

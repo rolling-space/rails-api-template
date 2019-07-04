@@ -7,8 +7,9 @@ require_relative('circle')
 
 module Template
   class ConfigApplication < Template::Writer
-    def initialize(gems:)
+    def initialize(gems:, app_name:)
       @gems = gems
+      @app_name = app_name
       @config_application = Template::ConfigFile.new('config/application.rb')
     end
 
