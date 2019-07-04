@@ -59,11 +59,14 @@ REPO_LIB = [
   'lib/files/config/database-pgsql.yml',
   'lib/files/config/routes.rb',
   'lib/files/config/sidekiq.yml',
+  'lib/files/config/environments/development.rb',
+  'lib/files/config/environments/production.rb',
+  'lib/files/config/environments/test.rb',
   'lib/files/config/initializers/redis.rb',
   'lib/files/config/initializers/rswag_api.rb',
   'lib/files/config/initializers/sidekiq.rb',
   'lib/files/spec/rails_helper.rb',
-  'lib/files/spec/spec_helper.rb',
+  'lib/files/spec/spec_helper.rb'
 ]
 
 def download(path, destination)
