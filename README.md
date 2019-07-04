@@ -20,43 +20,94 @@ To initialize your new Rails API with the template, run
 rails new api_name --api -m https://raw.githubusercontent.com/wscourge/rails-api-template/master/template.rb
 ```
 
+## Installation wizzard
+
+The template is based on an awesome [tty-prompt](https://github.com/piotrmurach/tty-prompt/) gem
+which enhances CLI input options vastly.
+
+If the gem isn't on your machine, it will be installed given the permission to do so.
+
+After installing the gem, all the template files will be downloaded to the temporarily
+created directory for further installation process. It might take a while.
+
+Next, you will be asked questions about your preferred confguration:
+
+1. Database - MySQL or PostgreSQL
+  - username
+  - password
+  - host
+2. Redis
+  - URL
+  - DB number
+  - port
+  - Sentinel _(optional)_
+    - URL
+    - DB
+    - port
+    - slaves host names
+  - Sidekiq _(optional)_
+    - namespace
+3. Git _(optional)_
+  - credentials _(optional)_
+    - username
+    - email
+  - branching model
+    - hubflow
+    - gitflow
+    - none
+4. Installation type
+  - Default
+  - Custom
+    - Production gems
+    - Development gems
+    - Test gems
+    - Continous Integration
+
 ## Insights
 
 All stuff included in the freshly new Rails API
 
 ### All environments
 
-- .dotenv
-- dry-validation
-- fast jsonapi
-- httparty
+```
+  ⬢ DRY Validation
+  ⬢ Fast JSON API (Netflix)
+  ⬢ HTTParty
+  ⬢ RSWAG
+  ⬢ ActionCable
+  ⬢ ActionMailer
+  ⬢ ActiveJob
+  ⬢ ActiveStorage
+```
 
 ### Development
 
-- capistrano
-- pry-byebug
-- overcommit
-- rspec-rails
-- rubocop
+```
+  ⬢ Better Errors
+  ⬢ Brakeman
+  ⬢ Bundler Audit
+  ⬢ Fasterer (Fastruby)
+  ⬢ Nested Generators
+  ⬢ binding.pry
+  ⬢ Rails Best Practices
+  ⬢ RuboCop
+  ⬡ Spring _(not selected by default!)_
+```
 
 ### Test
 
-- database_cleaner
-- factory_bot_rails
-- fuubar
-- simplecov
-
-### Development and Test
-
-- brakeman
-- bundler-audit
-- fasterer
-- ffaker
-- pry-byebug
-- rails_best_practices
-- rails-controller-testing
-- rspec-rails
-- rubocop-rspec
+```
+  ⬢ Database Cleaner
+  ⬢ Coveralls
+  ⬢ Factory Bot
+  ⬢ FFaker
+  ⬢ Guard
+  ⬢ Rails Controller Testing
+  ⬢ RSpec
+  ⬢ SimpleCov
+  ⬢ Shoulda Matchers
+  ⬢ TimeCop
+```
 
 ### CircleCI
 
