@@ -88,6 +88,7 @@ def build_tmp
   Dir.mkdir("#{tmp}/lib/files")
   Dir.mkdir("#{tmp}/lib/files/spec")
   Dir.mkdir("#{tmp}/lib/files/config")
+  Dir.mkdir("#{tmp}/lib/files/config/environments")
   Dir.mkdir("#{tmp}/lib/files/config/initializers")
   Dir.mkdir("#{tmp}/lib/files/.circleci")
   $LOAD_PATH.unshift(tmp) unless $LOAD_PATH.include?(tmp)
