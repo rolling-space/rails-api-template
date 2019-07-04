@@ -47,7 +47,7 @@ module Template
                                        namespace: answers[:sidekiq_namespace],
                                        redis: @redis)
       @gemfile = Template::Gemfile.new(gems: @gems, db: @db, redis: @redis, sidekiq: @sidekiq)
-      @rspec = Template::RSpec.new(gems: @gems, app_name: @app_name, sidekiq: @sidekiq)
+      @rspec = Template::RSpec.new(gems: @gems, sidekiq: @sidekiq)
       @rubocop = Template::RuboCop.new(gems: @gems)
       @rswag = Template::Rswag.new(gems: @gems)
       @dotenv = Template::DotEnv.new(gems: @gems, db: @db, redis: @redis)

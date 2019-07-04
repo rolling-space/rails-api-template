@@ -5,8 +5,7 @@ require_relative('config_file')
 
 module Template
   class RSpec < Template::Writer
-    def initialize(gems:, app_name:, sidekiq:)
-      @app_name = app_name.camelize
+    def initialize(gems:, sidekiq:)
       @gems = gems
       @sidekiq = sidekiq
       @spec_helper = Template::ConfigFile.new('spec/spec_helper.rb')

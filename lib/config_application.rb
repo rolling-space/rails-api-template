@@ -9,7 +9,7 @@ module Template
   class ConfigApplication < Template::Writer
     def initialize(gems:, app_name:)
       @gems = gems
-      @app_name = app_name
+      @app_name = app_name.camelize
       @config_application = Template::ConfigFile.new('config/application.rb')
     end
 
